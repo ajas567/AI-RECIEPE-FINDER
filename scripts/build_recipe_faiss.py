@@ -36,14 +36,15 @@ mongo_ids = []
 print("Extracting features from MongoDB...")
 start_time = time.time()
 
-cursor = recipes_col.find({}, {
+print("Downloading all recipes into memory to prevent MongoDB timeouts...")
+all_recipes = list(recipes_col.find({}, {
     "_id": 1, 
     "recipe_title": 1, 
     "description": 1, 
     "ingredients_canonical": 1
-})
+}))
 
-for recipe in cursor:
+for recipe in all_recipes:
     # Safely extract text fields
     title = str(recipe.get('recipe_title') or '')
     desc = str(recipe.get('description') or '')
