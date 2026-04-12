@@ -75,19 +75,25 @@ class InteractRequest(BaseModel):
     recipe_id: str
     interaction_type: str = "view" # "view" | "favorite" | "unfavorite"
 
-@app.on_event("startup")
-def startup_event():
-    # Pre-load the Vector Engine and Recommendation Engine into RAM when the server boots
+import asyncio
+
+def background_warmup():
+    print("Background Task: Pre-loading ML Engines and NLP models...")
     get_engine()
     get_recommendation_engine()
     get_personalization_engine()
     get_auth_engine()
     
-    # Warm up the NLP processor 
-    # NLTK lazily loads huge tagger datasets on its FIRST execution causing a 6-second API freeze.
-    # Running a dummy string fixes this by loading it into RAM before users connect.
     from modules.processing import clean_ingredient_text
     clean_ingredient_text("warmup sequence")
+    print("Background Task: ML Engines successfully warm!")
+
+@app.on_event("startup")
+def startup_event():
+    # Run the heavy loading in a background thread so Uvicorn opens the port INSTANTLY!
+    # This completely prevents Render from failing the health check due to port timeout.
+    loop = asyncio.get_event_loop()
+    loop.run_in_executor(None, background_warmup)
 
 @app.post("/signup")
 async def create_user(req: SignupRequest):
