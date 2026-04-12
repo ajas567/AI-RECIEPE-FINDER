@@ -1,6 +1,7 @@
 fastapi
 uvicorn
-pymongo
+pymongo[srv]
 pandas
 nltk
 sentence-transformers
+python-dotenv
