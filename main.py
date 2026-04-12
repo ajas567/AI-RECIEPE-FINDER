@@ -2,16 +2,39 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Optional
 import uvicorn
-from modules.similarity import get_engine
-from modules.processing import process_ingredients
-from modules.recommendation import get_recommendation_engine
-from modules.personalization import get_personalization_engine
-from modules.video import get_youtube_search_link
-from modules.auth import get_auth_engine
-from database import get_client, DB_NAME
 
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
+
+# NOTE: Heavy ML modules (similarity, recommendation, personalization, auth)
+# are imported LAZILY inside functions to prevent blocking Uvicorn's port binding.
+# This is critical for Render's health check timeout.
+
+def get_engine():
+    from modules.similarity import get_engine as _get_engine
+    return _get_engine()
+
+def get_recommendation_engine():
+    from modules.recommendation import get_recommendation_engine as _get_rec
+    return _get_rec()
+
+def get_personalization_engine():
+    from modules.personalization import get_personalization_engine as _get_pers
+    return _get_pers()
+
+def get_auth_engine():
+    from modules.auth import get_auth_engine as _get_auth
+    return _get_auth()
+
+def get_youtube_search_link(name):
+    from modules.video import get_youtube_search_link as _get_yt
+    return _get_yt(name)
+
+def process_ingredients(items):
+    from modules.processing import process_ingredients as _process
+    return _process(items)
+
+from database import get_client, DB_NAME
 
 app = FastAPI(title="INGREDIENT BASED AI RECIPE FINDER API")
 
