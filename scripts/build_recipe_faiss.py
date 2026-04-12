@@ -4,6 +4,8 @@ import faiss
 import numpy as np
 import time
 from sentence_transformers import SentenceTransformer
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from database import get_client, DB_NAME
 
 # 1. Connect to Database
