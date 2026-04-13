@@ -174,12 +174,12 @@ class RecommendationEngine:
                 
                 # Backend semantic image router
                 encoded_name = urllib.parse.quote(name)
-                safe_image_url = f"http://localhost:8000/api/image?q={encoded_name}"
+                safe_image_url = f"/api/image?q={encoded_name}"
                 r['id'] = str(r['_id'])
                 r['_id'] = str(r['_id'])
                 r['title'] = name
                 r['name'] = name
-                r['image'] = r.get('image') if r.get('image') and isinstance(r.get('image'), str) and 'http' in r.get('image') and 'loremflickr' not in r.get('image') else f"http://localhost:8000/api/image?q={encoded_name}"
+                r['image'] = r.get('image') if r.get('image') and isinstance(r.get('image'), str) and 'http' in r.get('image') and 'loremflickr' not in r.get('image') else f"/api/image?q={encoded_name}"
                 
                 if 'time' not in r: r['time'] = f"{r.get('minutes', 30)} min"
                 if 'difficulty' not in r: r['difficulty'] = "Easy" if (r.get('n_steps') or 0) <= 5 else "Medium" if (r.get('n_steps') or 0) <= 10 else "Hard"
@@ -220,13 +220,13 @@ class RecommendationEngine:
         for i, r in enumerate(results):
             name = str(r.get('name') or r.get('recipe_title') or 'Unknown Recipe').title()
             encoded_name = urllib.parse.quote(name)
-            safe_image_url = f"http://localhost:8000/api/image?q={encoded_name}"
+            safe_image_url = f"/api/image?q={encoded_name}"
             n_steps = r.get('n_steps') or 0
             r['id'] = str(r['_id'])
             r['_id'] = str(r['_id'])
             r['title'] = name
             r['name'] = name
-            r['image'] = r.get('image') if r.get('image') and isinstance(r.get('image'), str) and 'http' in r.get('image') and 'loremflickr' not in r.get('image') else f"http://localhost:8000/api/image?q={encoded_name}"
+            r['image'] = r.get('image') if r.get('image') and isinstance(r.get('image'), str) and 'http' in r.get('image') and 'loremflickr' not in r.get('image') else f"/api/image?q={encoded_name}"
             
             if 'time' not in r: r['time'] = f"{r.get('minutes', 30)} min"
             if 'difficulty' not in r: r['difficulty'] = "Easy" if n_steps <= 5 else "Medium" if n_steps <= 10 else "Hard"
@@ -262,12 +262,12 @@ class RecommendationEngine:
         for i, r in enumerate(results):
             name = str(r.get('name') or r.get('recipe_title') or r.get('title') or 'Unknown Recipe').title()
             encoded_name = urllib.parse.quote(name)
-            safe_image_url = f"http://localhost:8000/api/image?q={encoded_name}"
+            safe_image_url = f"/api/image?q={encoded_name}"
             r['id'] = str(r['_id'])
             r['_id'] = str(r['_id'])
             r['title'] = name
             r['name'] = name
-            r['image'] = r.get('image') if r.get('image') and isinstance(r.get('image'), str) and 'http' in r.get('image') and 'loremflickr' not in r.get('image') else f"http://localhost:8000/api/image?q={encoded_name}"
+            r['image'] = r.get('image') if r.get('image') and isinstance(r.get('image'), str) and 'http' in r.get('image') and 'loremflickr' not in r.get('image') else f"/api/image?q={encoded_name}"
             
             if 'time' not in r: r['time'] = f"{r.get('minutes', 30)} min"
             if 'difficulty' not in r: r['difficulty'] = "Easy" if n_steps <= 5 else "Medium" if n_steps <= 10 else "Hard"
@@ -296,12 +296,12 @@ class RecommendationEngine:
         for r in documents:
             name = str(r.get('name', r.get('recipe_title', 'Unknown Recipe'))).title()
             encoded_name = urllib.parse.quote(name)
-            safe_image_url = f"http://localhost:8000/api/image?q={encoded_name}"
+            safe_image_url = f"/api/image?q={encoded_name}"
             r['id'] = str(r['_id'])
             r['_id'] = str(r['_id'])
             r['title'] = name
             r['name'] = name
-            r['image'] = r.get('image') if r.get('image') and isinstance(r.get('image'), str) and 'http' in r.get('image') and 'loremflickr' not in r.get('image') else f"http://localhost:8000/api/image?q={encoded_name}"
+            r['image'] = r.get('image') if r.get('image') and isinstance(r.get('image'), str) and 'http' in r.get('image') and 'loremflickr' not in r.get('image') else f"/api/image?q={encoded_name}"
             
             if 'time' not in r: r['time'] = f"{r.get('minutes', 30)} min"
             if 'difficulty' not in r: r['difficulty'] = "Easy" if (r.get('n_steps') or 0) <= 5 else "Medium" if (r.get('n_steps') or 0) <= 10 else "Hard"
