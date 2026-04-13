@@ -1,3 +1,12 @@
+---
+title: AI Recipe Backend
+emoji: 🍳
+colorFrom: yellow
+colorTo: red
+sdk: docker
+pinned: false
+---
+
 # AI Ingredient-Based Recipe Finder
 
 Welcome to the AI Ingredient-Based Recipe Finder! This is a full-stack Machine Learning web application designed to take messy, unstructured user ingredients and instantly map them to over 62,000 professional recipes via semantic vector similarities.
