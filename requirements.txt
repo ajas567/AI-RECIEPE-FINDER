@@ -8,4 +8,5 @@ python-dotenv
 faiss-cpu
 requests
 passlib[bcrypt]
+bcrypt==4.0.1
 scipy
