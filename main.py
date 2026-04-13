@@ -359,6 +359,7 @@ def api_fetch_real_image(q: str):
     """
     with cache_lock:
         if q in image_cache:
+            print(f"⚡ CACHE: Image loaded from memory for '{q}'")
             return RedirectResponse(url=image_cache[q])
 
     hash_val = sum(ord(c) for c in q)
