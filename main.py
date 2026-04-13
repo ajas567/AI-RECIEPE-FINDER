@@ -328,6 +328,28 @@ FALLBACK_IMAGES = [
     "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80",
 ]
 
+import re
+
+def clean_recipe_name_for_image(name: str) -> str:
+    """Strips out adjectives and parenthesis to improve Spoonacular search matches."""
+    # Remove text in parentheses/brackets e.g. "(Arroz Valenciana)"
+    clean = re.sub(r'\(.*?\)|\[.*?\]', '', name)
+    
+    # Remove common "fluff" adjectives (case-insensitive)
+    fluff_words = [
+        r'\bmust-try\b', r'\beasy\b', r'\bquick\b', r'\bauthentic\b', 
+        r'\bbest\b', r'\bhealthy\b', r'\bdelicious\b', r'\bhomemade\b',
+        r'\bsimple\b', r'\bclassic\b', r'\bperfect\b', r'\bultimate\b',
+        r'\bamazing\b', r'\bsuper\b', r'\bfast\b'
+    ]
+    for pattern in fluff_words:
+        clean = re.sub(pattern, '', clean, flags=re.IGNORECASE)
+        
+    # Clean up any double spaces or leading hyphens left behind
+    clean = re.sub(r'^\s*-\s*', '', clean)
+    clean = re.sub(r'\s+', ' ', clean)
+    return clean.strip()
+
 @app.get("/api/image")
 def api_fetch_real_image(q: str):
     """
@@ -343,11 +365,16 @@ def api_fetch_real_image(q: str):
     fallback = FALLBACK_IMAGES[hash_val % len(FALLBACK_IMAGES)]
     real_image_url = None
 
+    # Clean the query for Spoonacular, but keep 'q' for the cache key
+    search_query = clean_recipe_name_for_image(q)
+    if not search_query: 
+        search_query = q # Faux-safe fallback if we stripped everything
+        
     try:
         resp = http_requests.get(
             "https://api.spoonacular.com/recipes/complexSearch",
             params={
-                "query": q,
+                "query": search_query,
                 "number": 1,
                 "addRecipeInformation": False,
                 "apiKey": SPOONACULAR_API_KEY
@@ -364,6 +391,7 @@ def api_fetch_real_image(q: str):
             results = data.get("results", [])
             if results and results[0].get("image"):
                 real_image_url = results[0]["image"]
+                print(f"✅ SPOONACULAR: Image found for '{q}'")
             else:
                 print(f"ℹ️ SPOONACULAR: No recipe found for '{q}'")
     except Exception as e:
