@@ -11,11 +11,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           lfs: true
-          
+
       - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git push --force https://ajas-km:$HF_TOKEN@huggingface.co/spaces/ajas-km/AI-Recipe-Backend HEAD:main
+          git lfs install
+          # Create a fresh orphan branch with NO history (strips old zip from memory)
+          git checkout --orphan deploy
+          git add -A
+          git commit -m "Deploy to HF Spaces"
+          git push --force https://ajas-km:$HF_TOKEN@huggingface.co/spaces/ajas-km/AI-Recipe-Backend deploy:main
