@@ -1,0 +1,18 @@
+# Ignore giant raw database ZIP files
+recipes_extended.zip
+*.zip
+
+# Ignore giant raw database files
+db/
+
+# Ignore Python Caches
+__pycache__/
+*.pyc
+
+# Ignore Node Modules
+frontend/node_modules/
+
+# Security
+.env
+
+frontend/.env
